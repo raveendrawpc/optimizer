@@ -1,0 +1,9 @@
+# Composer dependencies
+**/vendor/
+**/composer.lock
+
+# Node dependencies
+**/node_modules/
+**/npm-debug.log
+**/yarn-error.log
+**/pnpm-debug.log

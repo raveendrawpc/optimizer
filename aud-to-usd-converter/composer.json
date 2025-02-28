@@ -1,0 +1,14 @@
+{
+    "name": "rabindra/aud-to-usd-converter",
+    "description": "Convert AUD prices to USD with exclusions and caching",
+    "type": "wordpress-plugin",
+    "autoload": {
+      "psr-4": {
+        "Rabindra\\AUDToUSD\\": "includes/"
+      }
+    },
+    "require": {
+      "php": ">=7.0"
+    }
+  }
+  
