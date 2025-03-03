@@ -1,0 +1,19 @@
+.highlight-outline {
+    outline: 1px dotted red !important;
+    position: relative;
+}
+
+.highlight-outline::after {
+    content: attr(id) attr(data-id-warning);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 9999;
+    font-family: Monaco, monospace;
+}

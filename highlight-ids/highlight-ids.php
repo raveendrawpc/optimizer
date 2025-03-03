@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Highlight IDs in Target Containers
  * Description: Adds a button to the admin bar to outline elements with an ID inside user-defined containers.
- * Version: 1.1
+ * Version: 1.2
  * Author: Your Name
  */
 
@@ -77,42 +77,16 @@ function highlight_ids_admin_bar_button($wp_admin_bar) {
 }
 add_action('admin_bar_menu', 'highlight_ids_admin_bar_button', 100);
 
-// Inject JavaScript & CSS into the footer
-function highlight_ids_inline_script() {
-    $target_classes = get_option('highlight_ids_target_classes', '.example-container');
-    $target_classes = esc_js($target_classes); // Ensure safe output for JS
-?>
-    <script>
-        jQuery(document).ready(function($) {
-            $(document).on('click', '#wp-admin-bar-highlight_ids a', function(e) {
-                e.preventDefault();
-                $('<?php echo $target_classes; ?> [id]').each(function() {
-                    $(this).toggleClass('highlight-outline');
-                });
-            });
-        });
-    </script>
-    <style>
-        .highlight-outline {
-            outline: 1px dotted red !important;
-            position: relative;
-        }
+// Enqueue external JS & CSS
+function highlight_ids_enqueue_assets() {
+    if (is_admin()) return; // Only run on frontend
 
-        .highlight-outline::after {
-            content: attr(id);
-            position: absolute;
-            top: -20px;
-            left: 0;
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            font-family: Monaco, monospace;
-            font-size: 12px;
-            padding: 0px 7px;
-            border-radius: 3px;
-            white-space: nowrap;
-            z-index: 9999;
-        }
-    </style>
-<?php
+    $plugin_url = plugin_dir_url(__FILE__);
+    $target_classes = esc_js(get_option('highlight_ids_target_classes', '.example-container'));
+
+    wp_enqueue_script('highlight-ids-script', $plugin_url . 'assets/highlight-ids.js', array('jquery'), null, true);
+    wp_localize_script('highlight-ids-script', 'highlightIDs', array('targetClasses' => $target_classes));
+
+    wp_enqueue_style('highlight-ids-style', $plugin_url . 'assets/highlight-ids.css');
 }
-add_action('wp_footer', 'highlight_ids_inline_script', 100);
+add_action('wp_enqueue_scripts', 'highlight_ids_enqueue_assets');
